@@ -60,7 +60,19 @@ export default class App extends Component {
     );
   }
 
-
+signupFooterComponenet = () => {
+  return (
+    <View style={[viewStyles.forgottenLoginEncapsulationView, viewStyles.signupFooterComponenet]}>
+    <Text style={textStyles.forgottenLogin}>Dont have an account?</Text>
+    <TappableText
+      textStyle={[textStyles.forgottenLogin, textStyles.forgottenLoginBold,]}
+      textTapped={ () => Linking.openURL(urls.instagramSignUp)}
+    >
+      Sing up
+    </TappableText>
+    </View>
+  );
+}
   loginScreenComponent = () => {
     return (
         <ImageBackground
@@ -120,6 +132,7 @@ export default class App extends Component {
 
             </ScrollView>
 
+          {this.signupFooterComponenet()}
 
           </ImageBackground>
 
@@ -205,8 +218,16 @@ const viewStyles = {
     height: twitterIcon,
     marginHorizontal: 5
   },
-
-
+signupFooterComponenet: {
+  flex: 0.2,
+  backgroundColor: 'rgba(255, 255, 255, 0.15)',
+  borderWidth: 1,
+  borderColor: 'rgba(255, 255, 255, 0.15)',
+  shadowColor: 'black',
+  shadowOffset: {width: 0, height: 5.5},
+  height: null,
+  width: windowSize.width
+}
 
 };
 

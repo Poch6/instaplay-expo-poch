@@ -5,6 +5,7 @@ import TappableText from './src/components/TappableText';
 import Dimensions from 'Dimensions';
 
 const windowSize = Dimensions.get('window');
+const twitterIcon = 19;
 const standardComponentWidth = windowSize.width * 0.82;
 
 const colors = {
@@ -16,8 +17,8 @@ const colors = {
 
 const loginButtonInfo = {
   height: 45,
-  pageFontSize: 11,
-  borderWidth: 1,
+  pageFontSize: 12,
+  borderWidth: 0.8,
   borderRadius: 5
 }
 
@@ -40,6 +41,25 @@ export default class App extends Component {
   loginButtonPressed = () => {
     console.log("Button was pressed!");
   }
+
+  loginWithTwitterComponent = () => {
+    return (
+      <View style={viewStyles.twitterLoginViewStyle}>
+      <Image
+        source={require('./src/images/icons/twitter_bird.png')}
+        style={viewStyles.twitterIcon}
+        resizeMode={'contain'}
+      />
+      <TappableText
+        textStyle={[textStyles.forgottenLogin, textStyles.forgottenLoginBold, textStyles.textStylesForTwitterLogin]}
+        textTapped={ () => Linking.openURL(urls.twitterLogin)}
+      >
+        Log in with Twitter
+      </TappableText>
+      </View>
+    );
+  }
+
 
   loginScreenComponent = () => {
     return (
@@ -95,6 +115,8 @@ export default class App extends Component {
               <Text style={textStyles.orSeparatorTextStyle}>OR</Text>
               <View style={viewStyles.orSeparatorLine}/>
               </View>
+
+              {this.loginWithTwitterComponent()}
 
             </ScrollView>
 
@@ -159,7 +181,7 @@ const viewStyles = {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 14,
+    marginVertical: 14,
     paddingHorizontal: 5
     //backgroundColor: 'white'
   },
@@ -170,7 +192,21 @@ const viewStyles = {
     borderColor: colors.instagramButtonBorderColor,
     borderWidth: 0.5,
     marginHorizontal: 5
-  }
+  },
+  twitterLoginViewStyle: {
+    flexDirection: 'row',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+
+  },
+  twitterIcon: {
+    width: twitterIcon,
+    height: twitterIcon,
+    marginHorizontal: 5
+  },
+
+
 
 };
 
@@ -190,6 +226,10 @@ const textStyles = {
     backgroundColor: 'transparent',
     fontWeight: 'bold',
     fontSize: 13
+  },
+  textStylesForTwitterLogin: {
+    fontSize: 19,
+
   }
 
 };

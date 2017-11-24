@@ -90,6 +90,12 @@ export default class App extends Component {
                 </TappableText>
               </View>
 
+              <View style={ viewStyles.orSeparatorView}>
+              <View style={viewStyles.orSeparatorLine}/>
+              <Text style={textStyles.orSeparatorTextStyle}>OR</Text>
+              <View style={viewStyles.orSeparatorLine}/>
+              </View>
+
             </ScrollView>
 
 
@@ -147,7 +153,23 @@ const viewStyles = {
     marginTop: 10,
     justifyContent: 'center',
     alignItems: 'center',
-
+  },
+  orSeparatorView: {
+    flexDirection: 'row',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 14,
+    paddingHorizontal: 5
+    //backgroundColor: 'white'
+  },
+  orSeparatorLine: {
+    height: 1,
+    flex: 5,
+    backgroundColor: colors.instagramButtonBorderColor,
+    borderColor: colors.instagramButtonBorderColor,
+    borderWidth: 0.5,
+    marginHorizontal: 5
   }
 
 };
@@ -162,6 +184,12 @@ const textStyles = {
     fontWeight: 'bold',
     marginLeft: 3
 
+  },
+  orSeparatorTextStyle: {
+    color: 'white',
+    backgroundColor: 'transparent',
+    fontWeight: 'bold',
+    fontSize: 13
   }
 
 };

@@ -3,7 +3,7 @@ import {  Text, View, ImageBackground, Image, StatusBar, ScrollView, Linking, We
 import LoginButton from './src/components/LoginButton';
 import TappableText from './src/components/TappableText';
 import Dimensions from 'Dimensions';
-
+import InstaNavigationBar from './src/components/InstaNavigationBar.js';
 const windowSize = Dimensions.get('window');
 const twitterIcon = 19;
 const standardComponentWidth = windowSize.width * 0.82;
@@ -78,9 +78,8 @@ export default class App extends Component {
 
   instagramFeedsScreenComponent = () => {
     return (
-      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text>You are welcome</Text>
-      <Text>{this.state.accessToken}</Text>
+      <View style={{flex: 1,}}>
+        <InstaNavigationBar />
       </View>
 
     );

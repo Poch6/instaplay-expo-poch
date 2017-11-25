@@ -40,7 +40,6 @@ export default class App extends Component {
 
     this.state = {
       authenticationURL: urls.instagramAuthLogin,
-      isUserLoggedIn: false,
       displayauthenticationWebView: false,
       accessToken: ''
     }
@@ -53,12 +52,13 @@ export default class App extends Component {
 
     //if the current url contain the sbustring "accesstoken"
   if(webViewState.url.includes(accessTokenSubString)){
+
     if (this.state.accessToken.length < 1){
     //the index of the beginning of the access token
     var startIndexOfAccessToken = webViewState.url.lastIndexOf(accessTokenSubString) + accessTokenSubString.length;
     var foundAccessToken = webViewState.url.substr(startIndexOfAccessToken);
 
-    this.setState({accessToken: foundAccessToken, displayauthenticationWebView: false});
+    this.setState({accessToken: foundAccessToken});
 
 
     }
@@ -76,6 +76,15 @@ export default class App extends Component {
     );
   }
 
+  instagramFeedsScreenComponent = () => {
+    return (
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Text>You are welcome</Text>
+      <Text>{this.state.accessToken}</Text>
+      </View>
+
+    );
+  }
 
   loginButtonPressed = () => {
     this.setState({displayauthenticationWebView: true});
@@ -181,16 +190,25 @@ export default class App extends Component {
 
   render() {
 
-    if (this.state.displayauthenticationWebView == true) {
-      return (
-        this.authenticationWebViewComponent()
-      );
-    }
-    else {
+    var hasSuccessfullyLogginIn = (this.state.accessToken.length > 1);
+    var shouldDisplayloginScreen = (this.state.displayauthenticationWebView == false && this.state.accessToken < 1);
+
+    if(shouldDisplayloginScreen) {
       return (
         this.loginScreenComponent()
       );
     }
+    else if(hasSuccessfullyLogginIn){
+      return (
+        this.instagramFeedsScreenComponent()
+      );
+    }
+    else if (this.state.displayauthenticationWebView == true) {
+      return (
+        this.authenticationWebViewComponent()
+      );
+    }
+
 
   }
 

@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
-import {  Text, View, ImageBackground, Image, StatusBar, ScrollView, Linking, WebView } from 'react-native';
+import {  Text, View, ImageBackground, Image, StatusBar, ScrollView, Linking, WebView, FlatList } from 'react-native';
 import LoginButton from './src/components/LoginButton';
 import TappableText from './src/components/TappableText';
 import Dimensions from 'Dimensions';
 import InstaNavigationBar from './src/components/InstaNavigationBar.js';
 import NetworkManager from './src/model/NetworkManager';
+import InstaFeedCell from './src/components/InstaFeedCell';
 const windowSize = Dimensions.get('window');
 const twitterIcon = 19;
 const standardComponentWidth = windowSize.width * 0.82;
@@ -65,8 +66,11 @@ export default class App extends Component {
 
     //this
     this.apiManager.getSessionAndFeedData( (userData) => {
+      this.userData = userData;
       console.log(userData);
+
     }, (feedData) => {
+      this.feedData = feedData;
       console.log(feedData);
       this.setState({accessToken: foundAccessToken});
     } );
@@ -93,6 +97,11 @@ export default class App extends Component {
     return (
       <View style={{flex: 1,}}>
         <InstaNavigationBar />
+        <FlatList
+          data={this.feedData}
+          renderItem={({item}) => <InstaFeedCell cellData={item}/> }
+          keyExtractor={item =>item.id}
+        />
       </View>
 
     );

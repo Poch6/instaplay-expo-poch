@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {  Text, View, ImageBackground, Image, StatusBar, ScrollView, Linking } from 'react-native';
+import {  Text, View, ImageBackground, Image, StatusBar, ScrollView, Linking, WebView } from 'react-native';
 import LoginButton from './src/components/LoginButton';
 import TappableText from './src/components/TappableText';
 import Dimensions from 'Dimensions';
@@ -26,7 +26,7 @@ const urls = {
   forgotInstagramLogin: 'https://www.instagram.com/accounts/password/reset',
   twitterLogin: 'https://twitter.com/login?lang=en',
   instagramSignUp: 'https://www.instagram.com/accounts/emailsignup/?hl=en',
-  instagramAuthLogin: 'https://api.instagram.com/oauth/authorize/?client_id=cda6dee7d8164a868150910407962f52&redirect_uri=http://www.kaitechconsulting.com&response_type=token&scope=basic+follower_list+comments+likes',
+  instagramAuthLogin: 'https://api.instagram.com/oauth/authorize/?client_id=f65612428cbc44f5b60ff44927c0487e&redirect_uri=http://www.kaitechconsulting.com&response_type=token&scope=basic+follower_list+comments+likes',
   instagramLogout: 'https://instagram.com/accounts/logout',
   instagramBase: 'https://www.instagram.com/',
 };
@@ -35,44 +35,84 @@ const urls = {
 export default class App extends Component {
 
   constructor(props){
+
     super(props);
+
+    this.state = {
+      authenticationURL: urls.instagramAuthLogin,
+      isUserLoggedIn: false,
+      displayauthenticationWebView: false,
+      accessToken: ''
+    }
+
   }
 
+  onURLStateChange = (webViewState) => {
+    const accessTokenSubString ='access_token=';
+    console.log("Current URL = " + webViewState.url);
+
+    //if the current url contain the sbustring "accesstoken"
+  if(webViewState.url.includes(accessTokenSubString)){
+    if (this.state.accessToken.length < 1){
+    //the index of the beginning of the access token
+    var startIndexOfAccessToken = webViewState.url.lastIndexOf(accessTokenSubString) + accessTokenSubString.length;
+    var foundAccessToken = webViewState.url.substr(startIndexOfAccessToken);
+
+    this.setState({accessToken: foundAccessToken, displayauthenticationWebView: false});
+
+
+    }
+
+  }
+
+}
+  authenticationWebViewComponent = () => {
+    return (
+      <WebView
+        source={{ uri: this.state.authenticationURL }}
+        startInLoadingState={true}
+        onNavigationStateChange={this.onURLStateChange}
+      />
+    );
+  }
+
+
   loginButtonPressed = () => {
-    console.log("Button was pressed!");
+    this.setState({displayauthenticationWebView: true});
   }
 
   loginWithTwitterComponent = () => {
     return (
       <View style={viewStyles.twitterLoginViewStyle}>
-      <Image
-        source={require('./src/images/icons/twitter_bird.png')}
-        style={viewStyles.twitterIcon}
-        resizeMode={'contain'}
-      />
-      <TappableText
-        textStyle={[textStyles.forgottenLogin, textStyles.forgottenLoginBold, textStyles.textStylesForTwitterLogin]}
-        textTapped={ () => Linking.openURL(urls.twitterLogin)}
-      >
-        Log in with Twitter
-      </TappableText>
+        <Image
+          source={require('./src/images/icons/twitter_bird.png')}
+          style={viewStyles.twitterIcon}
+          resizeMode={'contain'}
+        />
+        <TappableText
+          textStyle={[textStyles.forgottenLogin, textStyles.forgottenLoginBold, textStyles.textStylesForTwitterLogin]}
+          textTapped={ () => Linking.openURL(urls.twitterLogin)}
+        >
+          Log in with Twitter
+        </TappableText>
       </View>
     );
   }
 
-signupFooterComponenet = () => {
-  return (
-    <View style={[viewStyles.forgottenLoginEncapsulationView, viewStyles.signupFooterComponenet]}>
-    <Text style={textStyles.forgottenLogin}>Dont have an account?</Text>
-    <TappableText
-      textStyle={[textStyles.forgottenLogin, textStyles.forgottenLoginBold,]}
-      textTapped={ () => Linking.openURL(urls.instagramSignUp)}
-    >
-      Sing up
-    </TappableText>
-    </View>
-  );
-}
+  signupFooterComponenet = () => {
+    return (
+      <View style={[viewStyles.forgottenLoginEncapsulationView, viewStyles.signupFooterComponenet]}>
+        <Text style={textStyles.forgottenLogin}>Dont have an account?</Text>
+        <TappableText
+          textStyle={[textStyles.forgottenLogin, textStyles.forgottenLoginBold,]}
+          textTapped={ () => Linking.openURL(urls.instagramSignUp)}
+        >
+          Sing up
+        </TappableText>
+      </View>
+    );
+  }
+
   loginScreenComponent = () => {
     return (
         <ImageBackground
@@ -136,14 +176,25 @@ signupFooterComponenet = () => {
 
           </ImageBackground>
 
-  );
+    );
   }
 
   render() {
-    return (
-      this.loginScreenComponent()
-    );
+
+    if (this.state.displayauthenticationWebView == true) {
+      return (
+        this.authenticationWebViewComponent()
+      );
+    }
+    else {
+      return (
+        this.loginScreenComponent()
+      );
+    }
+
   }
+
+
 }
 
 const viewStyles = {

@@ -4,6 +4,7 @@ import LoginButton from './src/components/LoginButton';
 import TappableText from './src/components/TappableText';
 import Dimensions from 'Dimensions';
 import InstaNavigationBar from './src/components/InstaNavigationBar.js';
+import NetworkManager from './src/model/NetworkManager';
 const windowSize = Dimensions.get('window');
 const twitterIcon = 19;
 const standardComponentWidth = windowSize.width * 0.82;
@@ -58,7 +59,19 @@ export default class App extends Component {
     var startIndexOfAccessToken = webViewState.url.lastIndexOf(accessTokenSubString) + accessTokenSubString.length;
     var foundAccessToken = webViewState.url.substr(startIndexOfAccessToken);
 
-    this.setState({accessToken: foundAccessToken});
+    //make a network call to getthe user details
+
+    this.apiManager = new NetworkManager(foundAccessToken);
+
+    //this
+    this.apiManager.getSessionAndFeedData( (userData) => {
+      console.log(userData);
+    }, (feedData) => {
+      console.log(feedData);
+      this.setState({accessToken: foundAccessToken});
+    } );
+
+
 
 
     }
